@@ -1,4 +1,4 @@
-class SudokuSolver:
+class BacktrackingSolver:
     def __init__(self, tablero):
         self.tablero = tablero
         self.nodos_explorados = 0
@@ -22,6 +22,9 @@ class SudokuSolver:
                     return False
 
         return True
+
+
+
 
     def resolver(self):
         for fila in range(9):

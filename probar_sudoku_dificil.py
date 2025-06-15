@@ -1,4 +1,6 @@
-from sudoku_backtracking import SudokuSolver  # cambiar si querés probar el branch_bound
+from sudoku_branch_bound import BranchBoundSolver  # cambiar si querés probar otro algoritmo
+from sudoku_backtracking import BacktrackingSolver
+
 import time
 
 tablero_dificil = [
@@ -13,7 +15,10 @@ tablero_dificil = [
     [8, 4, 0, 0, 0, 0, 0, 0, 0]
 ]
 
-solucionador = SudokuSolver(tablero_dificil)
+solucionador = BranchBoundSolver(tablero_dificil)
+#solucionador = BacktrackingSolver(tablero_dificil)
+
+
 
 inicio = time.time()
 if solucionador.resolver():
@@ -27,3 +32,7 @@ if solucionador.resolver():
     print("Tiempo de ejecución:", fin - inicio, "segundos")
 else:
     print("No tiene solución.")
+
+
+
+#python3 probar_sudoku_dificil.py

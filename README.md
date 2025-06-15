@@ -1,1 +1,0 @@
-# TPOGP7-sudoku
