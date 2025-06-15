@@ -1,8 +1,11 @@
 class BacktrackingSolver:
+    # Recibo un tablero como parámetro
+    # Creo atributos nodos explorados para contarlos
     def __init__(self, tablero):
         self.tablero = tablero
         self.nodos_explorados = 0
 
+    # Creo un metodo que comprueba si vale poner un número en la celda
     def es_valido(self, fila, columna, numero):
         # Verificar fila
         if numero in self.tablero[fila]:
@@ -23,18 +26,16 @@ class BacktrackingSolver:
 
         return True
 
-
-
-
+    # Este metodo tiene el algoritmo de backtracking
     def resolver(self):
         for fila in range(9):
             for columna in range(9):
-                if self.tablero[fila][columna] == 0:
-                    for numero in range(1, 10):
-                        self.nodos_explorados += 1
+                if self.tablero[fila][columna] == 0: #Si celda = 0
+                    for numero in range(1, 10): #Pruebo del 1 al 9
+                        self.nodos_explorados += 1 #+1 al contador de nodos explorados
                         if self.es_valido(fila, columna, numero):
-                            self.tablero[fila][columna] = numero
-                            if self.resolver():
+                            self.tablero[fila][columna] = numero #Pongo el numero
+                            if self.resolver(): #Llamada recursiva
                                 return True
                             self.tablero[fila][columna] = 0  # backtracking: deshacemos porque este número no llevó a solución, probamos el siguiente
                     return False  # si ningún número funcionó, volvemos atrás

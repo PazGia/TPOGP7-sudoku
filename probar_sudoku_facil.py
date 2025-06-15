@@ -17,8 +17,8 @@ tablero_facil = [
 
 ()
 
-#solucionador = BranchBoundSolver(tablero_facil)
-solucionador = BacktrackingSolver(tablero_facil)
+solucionador = BranchBoundSolver(tablero_facil)
+#olucionador = BacktrackingSolver(tablero_facil)
 
 inicio = time.time()
 if solucionador.resolver():
