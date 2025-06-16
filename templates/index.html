@@ -1,60 +1,129 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Sudoku Solver</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
     <div class="container">
         <h1>Sudoku Solver</h1>
 
         <div class="controls">
-            <form action="/" method="post">
-                <label for="difficulty">Generar Sudoku:</label>
+            <form action="/" method="post" id="formSudoku">
+                <label for="difficulty">Dificultad:</label>
                 <select name="difficulty" id="difficulty">
-                    <option value="facil">Fácil</option>
+                    <option value="facil" {% if difficulty == 'facil' %}selected{% endif %}>Fácil</option>
                     <option value="medio" {% if difficulty == 'medio' %}selected{% endif %}>Medio</option>
-                    <option value="dificil">Difícil</option>
+                    <option value="dificil" {% if difficulty == 'dificil' %}selected{% endif %}>Difícil</option>
                 </select>
-                <button type="submit" name="action" value="generate">Generar</button>
-                <button type="submit" name="action" value="solve_bnb">Resolver (Branch & Bound)</button>
-                <button type="submit" name="action" value="solve_bt">Resolver (Backtracking)</button>
+                <button type="submit" name="action" value="generate">Generar Sudoku</button>
+                <button type="submit" name="action" value="solve">Resolver</button>
             </form>
         </div>
 
-        <div class="sudoku-grid">
-            {# Outer loop for rows. Use loop.index0 directly for the row_idx. #}
-            {% for row in board %}
-                {# Assign row_idx from the outer loop's context for use in the inner loop #}
-                {% set row_idx = loop.index0 %}
-                
-                {# Inner loop for columns. loop.index0 here is the col_idx #}
-                {% for cell_value in row %}
-                    <div class="sudoku-cell
-                        {# Now use the explicitly set row_idx variable #}
-                        {% if row_idx % 3 == 2 and row_idx != 8 %} border-bottom-bold {% endif %}
-                        {# loop.index0 is the column index for the current cell #}
-                        {% if loop.index0 % 3 == 2 and loop.index0 != 8 %} border-right-bold {% endif %}">
-                        {{ cell_value if cell_value != 0 else '' }}
-                    </div>
-                {% endfor %}
-            {% endfor %}
+        <div class="boards-row">
+            <div class="board-container">
+                <h2>Sudoku Generado</h2>
+                <div class="sudoku-grid">
+                    {% for row in initial_board %}
+                        {% set row_idx = loop.index0 %}
+                        {% for cell_value in row %}
+                            <div class="sudoku-cell
+                                {% if row_idx % 3 == 2 and row_idx != 8 %} border-bottom-bold {% endif %}
+                                {% if loop.index0 % 3 == 2 and loop.index0 != 8 %} border-right-bold {% endif %}">
+                                {{ cell_value if cell_value != 0 else '' }}
+                            </div>
+                        {% endfor %}
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="board-container">
+                <h2>Solución con Backtracking</h2>
+                <div class="sudoku-grid">
+                    {% if backtracking_solution %}
+                        {% for row in backtracking_solution %}
+                            {% set row_idx = loop.index0 %}
+                            {% for cell_value in row %}
+                                <div class="sudoku-cell
+                                    {% if row_idx % 3 == 2 and row_idx != 8 %} border-bottom-bold {% endif %}
+                                    {% if loop.index0 % 3 == 2 and loop.index0 != 8 %} border-right-bold {% endif %}">
+                                    {{ cell_value if cell_value != 0 else '' }}
+                                </div>
+                            {% endfor %}
+                        {% endfor %}
+                    {% else %}
+                        <p>No resuelto aún.</p>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="board-container">
+                <h2>Solución con Branch & Bound</h2>
+                <div class="sudoku-grid">
+                    {% if branchbound_solution %}
+                        {% for row in branchbound_solution %}
+                            {% set row_idx = loop.index0 %}
+                            {% for cell_value in row %}
+                                <div class="sudoku-cell
+                                    {% if row_idx % 3 == 2 and row_idx != 8 %} border-bottom-bold {% endif %}
+                                    {% if loop.index0 % 3 == 2 and loop.index0 != 8 %} border-right-bold {% endif %}">
+                                    {{ cell_value if cell_value != 0 else '' }}
+                                </div>
+                            {% endfor %}
+                        {% endfor %}
+                    {% else %}
+                        <p>No resuelto aún.</p>
+                    {% endif %}
+                </div>
+            </div>
         </div>
 
-        {% if solution_info %}
-        <div class="solution-info">
-            <h2>Resultados de la Solución:</h2>
-            <p><strong>Algoritmo:</strong> {{ solution_info.algorithm }}</p>
-            <p><strong>Nodos Explorados:</strong> {{ solution_info.nodes_explored }}</p>
-            <p><strong>Tiempo de Ejecución:</strong> {{ "%.4f"|format(solution_info.time) }} segundos</p>
+        {% if solution_data %}
+        <div class="solution-table-container">
+            <h2>Datos de Ejecución</h2>
+            <table class="solution-table">
+                <thead>
+                    <tr>
+                        <th>Algoritmo</th>
+                        <th>Nodos Explorados</th>
+                        <th>Tiempo de Ejecución (s)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Backtracking</td>
+                        <td>{{ solution_data.backtracking.nodes_explored }}</td>
+                        <td>{{ "%.4f"|format(solution_data.backtracking.time) }}</td>
+                    </tr>
+                    <tr>
+                        <td>Branch & Bound</td>
+                        <td>{{ solution_data.branchbound.nodes_explored }}</td>
+                        <td>{{ "%.4f"|format(solution_data.branchbound.time) }}</td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
-        {% elif error_message %}
-        <div class="error-message">
-            <p>{{ error_message }}</p>
+
+        <div class="charts-row">
+            <div class="chart-container">
+                <canvas id="nodesChart"></canvas>
+            </div>
+            <div class="chart-container">
+                <canvas id="timeChart"></canvas>
+            </div>
         </div>
         {% endif %}
     </div>
+
+    {% if solution_data %}
+    <script>
+        const solutionData = {{ solution_data | tojson }}
+    </script>
+    <script src="{{ url_for('static', filename='charts.js') }}"></script>
+    {% endif %}
 </body>
 </html>
