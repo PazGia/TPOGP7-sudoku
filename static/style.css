@@ -1,18 +1,21 @@
 body {
     font-family: Arial, sans-serif;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
     background-color: #f0f0f0;
     margin: 0;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 100vh;
 }
 
 .container {
     background-color: #fff;
-    padding: 25px;
+    padding: 25px 30px;
     border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+    max-width: 1200px;
+    width: 100%;
     text-align: center;
 }
 
@@ -22,32 +25,51 @@ h1 {
 }
 
 .controls {
-    margin-bottom: 25px;
+    margin-bottom: 30px;
 }
 
 .controls label {
-    margin-right: 10px;
     font-size: 1.1em;
+    margin-right: 10px;
 }
 
 .controls select, .controls button {
-    padding: 10px 15px;
+    padding: 10px 18px;
     font-size: 1em;
     border: 1px solid #ccc;
     border-radius: 5px;
     cursor: pointer;
-    margin: 0 5px;
+    margin: 0 7px;
+    transition: background-color 0.3s ease;
 }
 
 .controls button {
     background-color: #4CAF50;
     color: white;
     border: none;
-    transition: background-color 0.3s ease;
 }
 
 .controls button:hover {
     background-color: #45a049;
+}
+
+.boards-row {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    margin-bottom: 40px;
+    flex-wrap: wrap;
+}
+
+.board-container {
+    text-align: center;
+    flex: 1 1 300px;
+}
+
+.board-container h2 {
+    margin-bottom: 15px;
+    color: #444;
+    font-weight: 600;
 }
 
 .sudoku-grid {
@@ -56,8 +78,8 @@ h1 {
     grid-template-rows: repeat(9, 40px);
     gap: 1px;
     border: 2px solid #333;
+    margin: 0 auto;
     width: fit-content;
-    margin: 0 auto 30px auto; /* Centrar y añadir espacio abajo */
 }
 
 .sudoku-cell {
@@ -66,16 +88,10 @@ h1 {
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 1.2em;
+    font-size: 1.3em;
     border: 1px solid #eee;
     background-color: #fff;
     color: #000;
-}
-
-.initial-value {
-    background-color: #e0e0e0;
-    font-weight: bold;
-    color: #333;
 }
 
 .border-bottom-bold {
@@ -86,30 +102,43 @@ h1 {
     border-right: 2px solid #333;
 }
 
-.solution-info {
-    margin-top: 20px;
-    padding: 15px;
-    border: 1px solid #4CAF50;
-    background-color: #e6ffe6;
-    border-radius: 8px;
+.solution-table-container {
+    margin-bottom: 40px;
 }
 
-.solution-info h2 {
-    color: #333;
-    margin-top: 0;
-    font-size: 1.3em;
+.solution-table {
+    width: 60%;
+    margin: 0 auto;
+    border-collapse: collapse;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
 
-.solution-info p {
-    margin: 8px 0;
-    color: #555;
+.solution-table th, .solution-table td {
+    border: 1px solid #ccc;
+    padding: 12px 20px;
+    text-align: center;
+    font-size: 1.1em;
 }
 
-.error-message {
-    margin-top: 20px;
-    padding: 15px;
-    border: 1px solid #ff4d4d;
-    background-color: #ffe6e6;
-    border-radius: 8px;
-    color: #d8000c;
+.solution-table th {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.charts-row {
+    display: flex;
+    justify-content: center;
+    gap: 50px;
+    flex-wrap: wrap;
+}
+
+.chart-container {
+    width: 400px;
+    max-width: 100%;
+}
+
+p {
+    font-style: italic;
+    color: #777;
+    margin-top: 40px;
 }
