@@ -45,7 +45,7 @@ class BranchBoundSolver:     # Complejidad general: O(9^n) en el peor caso, dond
                     if len(candidatos) < min_candidatos:      #Aplica la heurística MRV (Minimum Remaining Values): busca la celda vacía con menor cantidad de candidatos válidos.
                         min_candidatos = len(candidatos)
                         mejor_fila, mejor_columna = fila, columna
-                        if min_candidatos == 1:   # poda rápida si queda solo una opción
+                        if min_candidatos == 1: 
                             return mejor_fila, mejor_columna, candidatos
 
         if mejor_fila == -1:
@@ -55,18 +55,16 @@ class BranchBoundSolver:     # Complejidad general: O(9^n) en el peor caso, dond
 
 
     def calcular_cota_y_verificar(self):    # Complejidad O(81*9) revisa tablero completo y calcula cota
-        suma_candidatos = 0  # inicializamos la cota total
+        suma_candidatos = 0  
         for fila in range(9):
             for columna in range(9):
                 if self.tablero[fila][columna] == 0:
                     candidatos = self.calcular_candidatos(fila, columna)
 
-                    # Si alguna celda vacía no tiene candidatos válidos, esta rama es inviable
+                    # Si alguna celda vacía no tiene candidatos válidos, esta rama no es valida
                     if len(candidatos) == 0:
                         return None  # poda inmediata
 
-                    # En lugar de sumar simplemente len(candidatos), usamos len(candidatos) ** 2
-                    # Esto aumenta el "costo" de ramas con más incertidumbre
                     suma_candidatos += len(candidatos) ** 2
 
         return suma_candidatos   # devolvemos la cota final para esta rama
