@@ -8,7 +8,7 @@ import copy
 
 # Generás el tablero original
 generador = SudokuGenerator()
-tablero_dificil = generador.generar_sudoku("medio")
+tablero_dificil = generador.generar_sudoku("dificil")
 
 # Para Branch & Bound
 tablero_para_bnb = copy.deepcopy(tablero_dificil)

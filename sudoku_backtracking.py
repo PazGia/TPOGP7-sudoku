@@ -1,12 +1,12 @@
-class BacktrackingSolver:
+class BacktrackingSolver:           # O(9^n) donde n es la cantidad de celdas vacías.
     # Recibo un tablero como parámetro
     # Creo atributos nodos explorados para contarlos
     def __init__(self, tablero):
         self.tablero = tablero
         self.nodos_explorados = 0
 
-    # Creo un metodo que comprueba si vale poner un número en la celda
-    def es_valido(self, fila, columna, numero):
+    # Creo un metodo que comprueba si vale poner un número en la celda      O(1) → verifica fila, columna y subcuadro en tamaño fijo (9x9)
+    def es_valido(self, fila, columna, numero): 
         # Verificar fila
         if numero in self.tablero[fila]:
             return False
@@ -23,10 +23,11 @@ class BacktrackingSolver:
             for j in range(3):
                 if self.tablero[inicio_fila + i][inicio_columna + j] == numero:
                     return False
+        
 
         return True
 
-    # Este metodo tiene el algoritmo de backtracking
+    # Este metodo tiene el algoritmo de backtracking        O(9^n) → prueba los 9 números posibles en cada celda vacía
     def resolver(self):
         for fila in range(9):
             for columna in range(9):
